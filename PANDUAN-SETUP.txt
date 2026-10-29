@@ -1,0 +1,93 @@
+PASAR TANI CERDAS - PANDUAN SETUP
+=================================
+Total waktu: kurang lebih 20 menit. Semua gratis.
+Isi paket: index.html (aplikasinya), supabase-setup.sql (database), file ini.
+
+
+LANGKAH 1 - Buat project Supabase BARU
+--------------------------------------
+1. Buka supabase.com, masuk, klik "New project".
+2. Nama: pasar-tani-cerdas. Region: Southeast Asia (Singapore).
+3. Isi database password (simpan baik-baik), klik Create. Tunggu 1-2 menit.
+   PENTING: jangan pakai project kasir AMT.
+
+
+LANGKAH 2 - Pasang database
+---------------------------
+1. Di menu kiri, buka SQL Editor > New query.
+2. Buka file supabase-setup.sql, salin SEMUA isinya, tempel, klik Run.
+3. Harus muncul "Success. No rows returned". Kalau ada error merah,
+   foto layarnya dan kirim, jangan dijalankan ulang setengah-setengah.
+
+
+LANGKAH 3 - Atur login email
+----------------------------
+Authentication > Sign In / Providers > Email:
+- Pilihan A (paling gampang untuk uji coba): MATIKAN "Confirm email".
+  Pengguna langsung bisa masuk setelah daftar.
+- Pilihan B (lebih aman untuk dipakai umum): biarkan nyala.
+  Pengguna harus klik tautan di email dulu. Batas email gratis Supabase
+  sangat kecil (beberapa email per jam), jadi untuk jangka panjang
+  perlu pasang SMTP sendiri.
+
+Authentication > URL Configuration:
+- Site URL: isi alamat web Anda nanti, contoh
+  https://bayydyaa.github.io/pasartanicerdas/
+
+
+LANGKAH 4 - Sambungkan aplikasi
+-------------------------------
+1. Project Settings > API (atau Data API). Salin:
+   - Project URL           (contoh https://abcdxyz.supabase.co)
+   - anon / public key     (teks panjang diawali eyJ...)
+2. Buka index.html dengan editor teks (Notepad / VS Code).
+3. Cari dua baris ini di bagian atas skrip, ganti isinya:
+     const SUPABASE_URL = "ISI_PROJECT_URL_DI_SINI";
+     const SUPABASE_ANON_KEY = "ISI_ANON_KEY_DI_SINI";
+4. Simpan.
+
+Catatan: anon key memang aman ditaruh di web. Yang TIDAK BOLEH
+ditaruh di web atau dikirim ke siapa pun adalah "service_role key".
+
+
+LANGKAH 5 - Upload ke GitHub Pages
+----------------------------------
+1. Buat repo baru, misalnya "pasartanicerdas".
+2. Upload index.html saja (file .sql dan panduan ini TIDAK perlu diupload).
+3. Settings > Pages > Branch: main > Save. Tunggu 1-2 menit.
+
+
+LANGKAH 6 - Jadikan akun Anda admin
+-----------------------------------
+1. Buka web Anda, daftar akun seperti pengguna biasa.
+2. Kembali ke Supabase > SQL Editor, jalankan (ganti emailnya):
+
+   update public.profiles set is_admin = true
+   where id = (select id from auth.users where email = 'emailanda@gmail.com');
+
+3. Keluar lalu masuk lagi di web. Sekarang Anda bisa:
+   - verifikasi toko (buka halaman toko > Verifikasi toko)
+   - mengisi papan harga pasar (menu Harga pasar)
+   - menghapus produk yang melanggar (halaman produk)
+
+
+LANGKAH 7 - Uji sendiri sebelum diumumkan
+-----------------------------------------
+Pakai 2 HP / 2 browser dengan 2 akun berbeda:
+[ ] Akun A: daftar > Mulai jualan > tambah produk dengan foto
+[ ] Akun B: buka produk > Pesan lewat chat
+[ ] Akun A: pesan langsung muncul tanpa refresh? > Buat kartu kesepakatan
+[ ] Akun B: Setuju > stok produk berkurang?
+[ ] Akun B: Barang sudah diterima > beri ulasan > bintang muncul di produk?
+[ ] Akun A: pasang lelang panen, Akun B: tawar, Akun A: terima
+[ ] Lonceng notifikasi bertambah di kedua akun?
+
+
+YANG PERLU DIINGAT
+------------------
+- Paket gratis Supabase: database 500 MB, foto 1 GB. Project di-pause
+  kalau 7 hari tidak ada aktivitas sama sekali (tinggal klik Restore).
+- Uang tidak lewat web ini. Web hanya mencatat kesepakatan.
+- Belum ada: lapor penipuan, blokir pengguna, dan transaksi otomatis
+  selesai setelah beberapa hari. Ini sebaiknya ditambah sebelum web
+  dipromosikan ke banyak orang.
